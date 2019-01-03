@@ -1,0 +1,36 @@
+Overview
+********
+Redux!
+
+Quick Start [#quickStart]
+***********
+1. Create a text file called 'Example.fan'
+
+    syntax: fantom
+
+    using afRedux
+
+    class Example {
+
+        Void main() {
+        }
+    }
+
+3. Run 'Example.fan' as a Fantom script from the command line:
+
+    [afIoc]
+       ___    __                 _____        _
+      / _ |  / /_____  _____    / ___/__  ___/ /_________  __ __
+     / _  | / // / -_|/ _  /===/ __// _ \/ _/ __/ _  / __|/ // /
+    /_/ |_|/_//_/\__|/_//_/   /_/   \_,_/__/\__/____/_/   \_, /
+                                Alien-Factory IoC v3.0.4 /___/
+
+    IoC Registry built in 81ms and started up in 205ms
+
+    Micky Mouse
+
+
+
+Usage
+*****
+

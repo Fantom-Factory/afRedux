@@ -1,0 +1,24 @@
+Okay, so I came accross this little javascript library called Redux. It was touted as a "backend" lib along with "React" - I wasn't convinced. So I had a little closer look...
+
+it rants about React <fad> some "Facebook API" <fad>, CPQS <fad>, it's not looking good. But then I notice the words, "Immutability", and "single source of truth", and "state timemachine", and my interest perked. I see the tiny 8 method API and I'm hooked!
+
+I skim read the entire 7 page introdution. I "get it", "understand it", and WANT IT!
+
+A quick blast read of the basic tutorial and I bash out my own basic implementation in Fantom in just as much time.
+
+I have a bath to ponder over the implementations, and realise, I've already built it! Well, not in as many words, but my entire StackHub web app; the strict adherance to the focused update actions on the domain objects, and a global caching mechanism is REDUX! I just hadn't generalised the code, or formulated a library - but the idea, the mechanisms, were all there - just waiting to be discovered!
+
+Fantom, with it's first class support for Immutability - should make this a cinch!
+
+I wrote the (extreme) bare bones of Redux in 25 lines of code, which ran a faithful representation of the Redux basic example - which is the meat of the code...
+
+This example code is a great example for understanding how it all works and gets wired together... Let's go over the example code...
+
+Step 1) Define your (const) state - what data will your app hold?
+
+Step 2) Define the (write) actions that will be performed on the state.
+
+Step 3) Write the reducers, the actual implementation. (Reducers == stoopid name)
+
+Step 4) (Optional) Write some store listeners / observers.
+
