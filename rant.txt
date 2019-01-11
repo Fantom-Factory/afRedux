@@ -1,8 +1,97 @@
+
+I happened across this little javascript library called [Redux]`https://redux.js.org/`. The link I followed touted it as a silver bullet "backend" library along with React. Now, I despise all these modern javascript *fad* libraries. So, like a hauty teenager looking to get outraged by reading facebook posts, I decided to have a closer look...
+
+It liberally mentions "facebook" *<hate>* as an inspiration, and CPQS *<fad>*. The React <more fad> library is it's biggest consumer. I was getting really angry and worked up, just as intended! 
+
+But then I start to notice words like, "immutability", "pure functions", and "single source of truth" and my interest begins to perk up. I read "time-traveling state machine" and I'm intrguied. I then see the teeny tiny 9 method [public API]`https://redux.js.org/api/api-reference` and I'm hooked!
+
+I immediately skim read the entire 7 page introdution. I *"get it"*, I *"understand it"*, but most importantly I *"WANT IT"*!
+
+So here's Redux in a nutshell as I see it:
+
+Redux is more of a methodology than a library and it's a formula for representing your domain model with immutable data. This state can then only be updated by applying small incremental actions. These actions themselves are also immutable and idempotent (pure functions) - which makes your entire system completely deterministic to point where you can even roll your domain back in time!
+
+Yes, Redux is just [Event Sourcing]`https://martinfowler.com/eaaDev/EventSourcing.html` at heart, but Redux is more than that. It's not just an term or an idea, it's also a framework and methodology for implementing it.
+
+Anyway, I was later soaking in a bath and found myself pondering over the design implications of implementing a Redux application and realised I'd already built it! **"Eureka!"**
+
+The [StackHub]`https://stackhub.org/` web application, with its strict adherence to update actions on the domain objects backed by a global caching mechanism... is Redux! I just hadn't generalised the code or abstracted out a library. It may be hard coded, but the design ideas were all there!
+
+So I was excited again and felt the need to write Redux in Fantom. I felt it should be easy as Fantom is type safe and has immutability baked in to its core - it lends itself to Redux far more than javascript ever will!
+
+And here it, I bashed out a fully functioning and complete bare bones implementation of Redux in about 25 lines of code - which runs a faithful representation of the basic Redux Todo example.
+
+code
+
+
+Next I'll walk you through the Todo example. It's great for understanding how a Redux application works and how it's all wired together.
+
+The idea is to create a domain model that lets you create a Todo list, mark them complete, and update some view data. But all using immutable state.
+
+I believe the following type safe Fantom implementation of the Todo application is a *lot easier* to follow understand than the corresponding javascript one.
+
+So here goes:
+
+1. Define your domain model
+
+You need to first define what data your application will hold. Note how all the classes are 'const' and immutable (thank you Fantom!). This is the key to a deterministic Redux application.
+
+code
+
+2. Define your actions
+
+Actions are write operations that will be performed on your domain. Javascript Redux uses strings to identify unique actions. Here in Fantom land we can use type safe classes instead.
+
+
+3. Write your reducers
+
+This is the actual implementation of how you update the immutable domain model.
+
+You tend to write a 'Reducer' for each part of the domain model that needs updating. So we have three, one for the root object, one for the view state, and one for updating the 'Todo' entity.
+
+code 
+
+Yes, the word [Reducer]`https://redux.js.org/glossary#reducer` is a terrible, non-descriptive word. The Redux documentation contains paragraphs of text that attempt to justify the use of the word "reduce", which just tells me even they know it's stoopid name!
+
+4. (Optional) Write some listeners
+
+Listeners receive callback events when an action is dispatched / invoked. The example uses them to print out the state of the domain after each action.
+
+code
+
+
+And here is the main example that invokes all of the above. You can see how, line-for-line, it is identical the [javascript version]`https://redux.js.org/basics/store#dispatching-actions`.
+
+code
+
+
+Which when run, prints out:
+
+code
+
+
+Admittedly, as the above 100 line example shows, most of the work is done by your application. You have to write the meat of Redux yourself. So the real challenge is yet to come, to see how much boilerplate code I can cut out.
+
+And I already have ideas for that...
+
+Stay tuned!
+
+
+
+---------------------------
+
 Okay, so I came accross this little javascript library called Redux. It was touted as a "backend" lib along with "React" - I wasn't convinced. So I had a little closer look...
 
-it rants about React <fad> some "Facebook API" <fad>, CPQS <fad>, it's not looking good. But then I notice the words, "Immutability", and "single source of truth", and "state timemachine", and my interest perked. I see the tiny 8 method API and I'm hooked!
+it rants about React <fad> some "Facebook API" <fad>, CPQS <fad>, it's not looking good. But then I notice the words, "Immutability", "pure functions", and "single source of truth", and "state timemachine", and my interest perked. I see the tiny 8 method API and I'm hooked!
 
 I skim read the entire 7 page introdution. I "get it", "understand it", and WANT IT!
+
+---
+It's a forumla for representing your domain data with immutable state. The state can only then be updated by applying small incremental actions. In this way, even in a very async system (like an event driven web page), actions are only ever applied in a known sequence - so your state is very
+
+actions should be const / immutable
+
+---
 
 A quick blast read of the basic tutorial and I bash out my own basic implementation in Fantom in just as much time.
 
@@ -22,3 +111,4 @@ Step 3) Write the reducers, the actual implementation. (Reducers == stoopid name
 
 Step 4) (Optional) Write some store listeners / observers.
 
+So now the challenge is to reduce as much boilerplate code in the 100 line example as much as possible!

@@ -18,10 +18,12 @@ class Build : BuildPod {
 
         depends = [
             "sys        1.0.71 - 1.0",
+            "concurrent 1.0.71 - 1.0",
+
 
             // ---- Core ------------------------
             "afIoc        3.0.0  - 3.0",
-
+            "afConcurrent 1.0.20 - 1.0",
         ]
 
         srcDirs = [`fan/`, `fan/public/`, `test/`]

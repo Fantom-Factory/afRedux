@@ -7,6 +7,6 @@ using afIoc
 const class ReduxModule {
 
 	static Void defineServices(RegistryBuilder defs) {
-		defs.addService(Redux#)
+//		defs.addService(...)
 	}	
 }

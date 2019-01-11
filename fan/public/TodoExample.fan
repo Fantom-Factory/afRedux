@@ -1,7 +1,23 @@
 
 const class TodoExample {
 	static Void main(Str[] args) {
-		store := Store(AppRootState(), AppRootReducer())
+		
+		// try to keep this example as faithful to the orig as possible 
+		
+		reduce := | |Obj? state, Action action -> Obj?| fn -> Reducer| {
+			FuncReducer(fn)
+		}
+		
+		rootReducer := reduce |AppRootState state, action| {
+			Reducer.clone(state, [
+//				AppRootState#filter	: ReducerHelper.actionFieldValueReducer(SetVisibilityFilterAction#filter).reduce(state.filter, action),
+				AppRootState#filter	: VisibilityReducer().reduce(state.todos, action),
+				AppRootState#todos	: TodoReducer().reduce(state.todos, action)
+			])
+		}		
+		
+//		store := Store(AppRootState(), AppRootReducer())
+		store := Store(AppRootState(), rootReducer)
 		
 		echo(store.getState)
 		
@@ -77,15 +93,23 @@ const class SetVisibilityFilterAction : Action {
 const class AppRootReducer : Reducer {
 	override Obj? reduce(Obj? state, Action action) {
 		appState := (AppRootState) state
-		return AppRootState {
-			it.filter = VisibilityReducer().reduce(appState.filter, action)
-			it.todos  = TodoReducer().reduce(appState.todos, action)
-		}
+		return clone(appState, [
+			AppRootState#filter	: VisibilityReducer().reduce(appState.filter, action),
+			AppRootState#todos	: TodoReducer().reduce(appState.todos, action)
+		])
+		
+//		appState := (AppRootState) state
+//		return AppRootState {
+//			it.filter = VisibilityReducer().reduce(appState.filter, action)
+//			it.todos  = TodoReducer().reduce(appState.todos, action)
+//		}
 	}
 }
 
 const class VisibilityReducer : Reducer {
 	override Obj? reduce(Obj? state, Action action) {
+//		actionFieldValue(state, action, SetVisibilityFilterAction#filter)
+		
 		filter := (Str) state
 		if (action is SetVisibilityFilterAction)
 			filter = ((SetVisibilityFilterAction) action).filter
@@ -103,6 +127,7 @@ const class TodoReducer : Reducer {
 				it.text 		= addTodoAction.text
 				it.isComplete	= false
 			}
+//			return addToList(state, newTodo)
 			todos = todos.rw
 			todos.add(newTodo)
 		}
@@ -110,6 +135,12 @@ const class TodoReducer : Reducer {
 		if (action is ToggleTodoAction) {
 			toggleTodoAction := (ToggleTodoAction) action
 			oldTodo := todos[toggleTodoAction.todoId]
+
+//			newTodo := clone(oldTodo, [
+//				Todo#isComplete	: !oldTodo.isComplete
+//			])
+//			return setListItem(state, toggleTodoAction.todoId, newTodo)
+			
 			newTodo := Todo {
 				it.text 		= oldTodo.text
 				it.isComplete	= !oldTodo.isComplete
