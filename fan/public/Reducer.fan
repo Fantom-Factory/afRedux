@@ -14,10 +14,11 @@ const mixin Reducer {
 	
 	private static Obj cloneObj(Obj obj, |Field:Obj|? overridePlan := null) {
 		plan := Field:Obj[:]
-		obj.typeof.fields.each {
-			value := it.get(obj)
+		obj.typeof.fields.each |field| {
+			if (field.isStatic) return
+			value := field.get(obj)
 			if (value != null)
-				plan[it] = value
+				plan[field] = value
 		}
 
 		overridePlan?.call(plan)
@@ -51,7 +52,7 @@ const class FuncReducer : Reducer {
 	}
 	
 	override Obj? reduce(Obj? state, Action action) {
-		this.fn(state, action)
+		this.fn(state, action).toImmutable
 	}
 }
 
